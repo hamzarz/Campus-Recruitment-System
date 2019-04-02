@@ -1,27 +1,150 @@
 import React, { Component } from 'react'
+import { connect } from 'react-redux'
+import fire from '../Firebase/config'
+import { fetchCompData, fetchStudData, gettingUserId } from '../store/actions/index'
 
 class AdminPage extends Component {
 
-    redirect = (catagory) => {
-        const userCatagory = catagory;
-        switch(userCatagory) {
-            case 'company':
-            return this.props.history.replace('/all-company')
-            case 'student':
-            return this.props.history.replace('/student-details')
-            default:
-            return'nothing to show'
+    state = {
+        catagory:''
+    }
+
+    // componentWillMount = () => {
+    //     this.gettingUserId()
+    // }
+
+    blockUser = (uid, isStatus) => {
+        let personCatagory = ''
+        fire.database().ref('AllUsersData/' + uid).on("value", snapshot => {
+            let catagory = snapshot.val().catagory;
+            personCatagory = catagory
+            {personCatagory === 'company' ?
+            fire.database().ref('CompanyRegister/' + uid).update({
+                isStatus:!isStatus
+            }) : 
+            fire.database().ref('StudentRegister/' + uid).update({
+                isStatus:!isStatus
+            })
+            }
+        })
+        
+    }
+
+    fetchRequestedData = () => {
+        const catagory = this.state.catagory;
+        if(catagory === 'student') {
+            return(
+                <div className="row">
+                    <div className="col s1"></div>
+                    <div className="col s10">
+                    <table className="centered highlight">
+                        <thead>
+                            <tr>
+                                <th>First Name</th>
+                                <th>Last Name</th>
+                                <th>Address</th>
+                                <th>Age</th>
+                                <th>University</th>
+                                <th>Year Of Passing</th>
+                                <th>Aggregate</th>
+                                <th>Department</th>
+                                <th>Block</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        {this.props.student ? this.props.student.map(items => {
+                        return(
+                            <tr>
+                                <td>{items.studentData.fName}</td>
+                                <td>{items.studentData.lName}</td>
+                                <td>{items.studentData.address}</td>
+                                <td>{items.studentData.age}</td>
+                                <td>{items.studentData.university}</td>
+                                <td>{items.studentData.yearOfPassingUni}</td>
+                                <td>{items.studentData.aggregateUni}</td>
+                                <td>{items.studentData.department}</td>
+                                <td onClick={() => this.blockUser(items.uid, items.isStatus)}>{items.isStatus ? 'DO IT' : 'UNDO'}</td>
+                            </tr>
+                        )}) : 'loading'}
+                        </tbody>
+                    </table>
+                    </div>
+                    </div> 
+            )
         }
+        else if (catagory === 'company') {
+            return(
+                <div className="row">
+                    <div className="col s1"></div>
+                    <div className="col s10">
+                        <table className="centered highlight">
+                            <thead>
+                                <tr>
+                                    <th>Company Name</th>
+                                    <th>Contact No</th>
+                                    <th>Email</th>
+                                    <th>Established Date</th>
+                                    <th>Block</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {this.props.company ? this.props.company.map(item => {
+                                    return (
+
+                                        <tr>
+                                            <td>{item.companyData.companyName}</td>
+                                            <td>{item.companyData.contact}</td>
+                                            <td>{item.companyData.email}</td>
+                                            <td>{item.companyData.establishedDate}</td>
+                                            <td onClick={() => this.blockUser(item.uid, item.isStatus)}>{item.isStatus?'DO IT':'UNDO'}</td>
+                                        </tr>
+                                    )
+                                }) : 'loading'}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            )
+        }
+    }
+
+    getStudentData = () => {
+        this.setState({catagory:'student'})
+        this.props.fetchStudData();
+    }
+    getCompanyData = () => {
+        this.setState({catagory:'company'})
+        this.props.fetchCompData();
     }
 
     render() {
         return(
             <div>
-                <button onClick={() => {this.redirect('student')}}>Student</button>
-                <button onClick={() => {this.redirect('company')}}>Company</button>
+                <button className='waves-effect waves-light btn' onClick={this.getStudentData}>Student</button>
+                <button className='waves-effect waves-light btn' onClick={this.getCompanyData}>Company</button>
+                {this.fetchRequestedData()}
             </div>
         )
     }
 }
 
-export default AdminPage
+const mapStateToProps = (state) => {
+    return{
+        // Data:state.admin.allUsersData
+        student:state.student.studentDataArray,
+        company:state.company.companyDataArray,
+        catagory:state.company.currentUserCatagory
+    }
+}
+
+const mapDispatchToProps = (dispatch) => {
+    dispatch(gettingUserId())
+    return {
+        fetchCompData : () => dispatch(fetchCompData()),
+        fetchStudData : () => dispatch(fetchStudData())
+        // gettingUserId : () => dispatch(gettingUserId())
+    }
+}
+
+
+export default connect(mapStateToProps, mapDispatchToProps)(AdminPage)

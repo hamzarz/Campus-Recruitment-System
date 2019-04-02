@@ -1,15 +1,16 @@
-import React, { Component } from 'react';
-import { connect } from 'react-redux';
-import { studRegister } from '../store/actions/index';
+import React, { Component } from 'react'
+import { connect } from 'react-redux'
+import { getStudProfile, updateRequest } from '../store/actions/index'
+import './studentForm.css'
 
-
-
-class StudentRegister extends Component {
+class CompanyProfile extends Component {
+    debugger
     state = {
+        formClass:'col s10 hidden',
         fName:"",
         lName:"",
-        email:"",
-        gender:"",
+        // email:"",
+        // gender:"",
         contact:"",
         // city:"",
         address:"",
@@ -21,30 +22,70 @@ class StudentRegister extends Component {
         department:"",
         // otherQualification:"",
         // extracurricular:"",
-        userName:"",
-        password:""
+        // userName:"",
+        // password:""
     }
-
-
     handleChange = (e) => {
-        this.setState({
-            [e.target.id]: e.target.value
-        })
+        this.setState({[e.target.id]: e.target.value})
+        console.log(this.state.fName)
     }
-
-    submitRegisterForm = (e) => {
+    handleSubmit = (e) => {
         e.preventDefault();
-       // const data = new FormData(e.target);
-       this.props.studRegister(this.state)
-       this.props.history.replace('/')
+        this.props.updateRequest(this.state)
     }
+    
+    update = () => {
+        let {studentProfile} = this.props
+        this.setState({fName:studentProfile.fName,lName:studentProfile.lName,email:studentProfile.email,gender:studentProfile.gender,
+        contact:studentProfile.contact,address:studentProfile.address,age:studentProfile.age,university:studentProfile.university,
+        yearOfPassingUni:studentProfile.yearOfPassingUni,aggregateUni:studentProfile.aggregateUni,department:studentProfile.department,
+        userName:studentProfile.userName,password:studentProfile.password
+        })
+        return(
+            this.setState({formClass:'col s10'})
+        )
+    }
+    
 
     render() {
+        let {studentProfile} = this.props
         return(
             <div>
+                    <div className="row">
+                    <div className="col s1"></div>
+                    <div className="col s10">
+                    <table className="centered highlight">
+                        <thead>
+                            <tr>
+                                <th>First Name</th>
+                                <th>Last Name</th>
+                                <th>Address</th>
+                                <th>Age</th>
+                                <th>University</th>
+                                <th>Year Of Passing</th>
+                                <th>Aggregate</th>
+                                <th>Department</th>
+                                <th>Update</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>{studentProfile ? studentProfile.fName: 'loading'}</td>
+                                <td>{studentProfile ? studentProfile.lName: 'loading'}</td>
+                                <td>{studentProfile ? studentProfile.address: 'loading'}</td>
+                                <td>{studentProfile ? studentProfile.age: 'loading'}</td>
+                                <td>{studentProfile ? studentProfile.university: 'loading'}</td>
+                                <td>{studentProfile ? studentProfile.yearOfPassingUni: 'loading'}</td>
+                                <td>{studentProfile ? studentProfile.aggregateUni: 'loading'}</td>
+                                <td>{studentProfile ? studentProfile.department : 'loading'}</td>
+                                <td><button onClick={() => {this.update()}}>Update</button></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <div>
                 <div className='row'>
                 <div className="col s1"></div>
-          <form className="col s10" onSubmit={this.submitRegisterForm}>
+          <form className={this.state.formClass} onSubmit={this.handleSubmit}>
 
             <div className="row">
                 <div className="col s12">
@@ -57,21 +98,6 @@ class StudentRegister extends Component {
                         <i className="material-icons prefix">location_city</i>
                         <input onChange={this.handleChange} value={this.state.lName} id="lName" type="text" className="validate" />
                         <label htmlFor="lName">Last Name</label>
-                    </div>
-                </div>
-            </div>
-
-            <div className="row">
-                <div className="col s12">
-                    <div className="input-field col s6">
-                        <i className="material-icons prefix">email</i>
-                        <input onChange={this.handleChange} value={this.state.email} id="email" type="email" className="validate" />
-                        <label htmlFor="email">Email</label>
-                    </div>
-                    <div className="input-field col s6">
-                        <i className="material-icons prefix">perm_contact_calendar</i>
-                        <input onChange={this.handleChange} value={this.state.gender} id="gender" type="text" className="validate" />
-                        <label htmlFor="gender">Gender</label>
                     </div>
                 </div>
             </div>
@@ -100,7 +126,7 @@ class StudentRegister extends Component {
                         <label htmlFor="age">Age</label>
                     </div>
                     <div className="input-field col s6">
-                        <i className="material-icons prefix">location_city</i>
+                        <i className="material-icons prefix">school</i>
                         <input onChange={this.handleChange} value={this.state.department} id="department" type="text" className="validate" />
                         <label htmlFor="department">Department</label>
                     </div>
@@ -127,36 +153,6 @@ class StudentRegister extends Component {
                 </div>
             </div>
 
-            {/* <div className="row">
-                <div className="col s12">
-                    <div className="input-field col s6">
-                        <i className="material-icons prefix">text_fields</i>
-                        <textarea onChange={this.handleChange} value={this.state.otherQualification} id="otherQualification" className="materialize-textarea"></textarea>
-                        <label htmlFor="otherQualification">Other Qualifications</label>
-                    </div>
-                    <div className="input-field col s6">
-                        <i className="material-icons prefix">directions_bike</i>
-                        <input onChange={this.handleChange} value={this.state.extracirricular} id="extracurricular" type="text" className="validate" />
-                        <label htmlFor="extracurricular">Extracurricular Activities</label>
-                    </div>
-                </div>
-            </div> */}
-
-            <div className="row">
-                <div className="col s12">
-                    <div className="input-field col s6">
-                        <i className="material-icons prefix">account_circle</i>
-                        <input onChange={this.handleChange} value={this.state.userName} type="text" id="userName" className="validate"></input>
-                        <label htmlFor="userName">User Name</label>
-                    </div>
-                    <div className="input-field col s6">
-                        <i className="material-icons prefix">lock</i>
-                        <input onChange={this.handleChange} value={this.state.password} id="password" type="password" className="validate" />
-                        <label htmlFor="password">Password</label>
-                    </div>
-                </div>
-            </div>
-
             <button className="btn waves-effect waves-light" type="submit" name="action">Submit
                 <i className="material-icons right">send</i>
             </button>
@@ -164,13 +160,28 @@ class StudentRegister extends Component {
           </form>
         </div>
             </div>
-        );
-    }
-}
-const mapDispatchToProps = (dispatch) => {
-    return {
-    studRegister: (studentData) => dispatch(studRegister(studentData))
+                    </div>
+                    </div>
+            
+            </div>
+        )
     }
 }
 
-export default connect(null, mapDispatchToProps)(StudentRegister);
+const mapStateToProps = (state) => {
+    console.log('state')
+    console.log(state)
+    return{
+        studentProfile : state.student.studentProfileData
+    }
+}
+
+const mapDispatchToProps = (dispatch) => {
+    dispatch(getStudProfile())
+    return{
+        updateRequest: (updatedData) => dispatch(updateRequest(updatedData))
+    }
+}
+
+
+export default connect(mapStateToProps, mapDispatchToProps)(CompanyProfile)

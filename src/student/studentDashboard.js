@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
-import StudentDetails from '../company/studentDetails'
-import CompanyProfile from './companyProfile'
+import AllCompany from '../student/allCompany'
+import StudentProfile from './studentProfile'
 import fire from '../Firebase/config'
 
 class CompanyDashboard extends Component {
@@ -14,7 +14,7 @@ class CompanyDashboard extends Component {
     checkStatus = () => {
         const user = fire.auth().currentUser;
         const uid = user.uid
-        fire.database().ref("CompanyRegister/" + uid).on('value', snapshot => {
+        fire.database().ref("StudentRegister/" + uid).on('value', snapshot => {
             let currentStatus = snapshot.val().isStatus;
             this.setState({ isStatus: currentStatus })
         })
@@ -26,9 +26,9 @@ class CompanyDashboard extends Component {
                 return (
                     this.setState({profile:'OwnProfile'})
                 )
-            case 'studentDetails':
+            case 'allCompany':
                 return (
-                    this.setState({profile:'studentDetails'})
+                    this.setState({profile:'allCompany'})
                 )
             default :
             return console.log('nothing')
@@ -40,14 +40,14 @@ class CompanyDashboard extends Component {
         if(profile === 'OwnProfile') {
             return(
                 <div>
-                <CompanyProfile/>
+                <StudentProfile/>
                 </div>
             )
         }
-        else if(profile === 'studentDetails') {
+        else if(profile === 'allCompany') {
             return(
                 <div>
-                    <StudentDetails/>
+                    <AllCompany/>
                 </div>
             )
         }
@@ -58,7 +58,7 @@ class CompanyDashboard extends Component {
         return (
             <div>
                 <button className='waves-effect waves-light btn' onClick={() => { this.redirect('ownProfile') }}>Own Profile</button>
-                <button className='waves-effect waves-light btn' onClick={() => { this.redirect('studentDetails') }}>Student Details</button>
+                <button className='waves-effect waves-light btn' onClick={() => { this.redirect('allCompany') }}>Companies</button>
                 {this.state.isStatus ? this.getData() : alert('You are blocked by Admin')}
             </div>
         )

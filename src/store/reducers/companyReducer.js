@@ -1,17 +1,28 @@
 const initState = {
     companyDataArray:[],
-    vacancyDataArray:[],
+    // vacancyDataArray:[],
     allDataArray:[],
-    currentUserCatagory:''
+    currentUserCatagory:'',
+    companyProfileData:[],
+    dataArray:[]
 }
 
 const companyReducer = (state=initState, action) => {
     switch (action.type) {
+        case 'COMPANY_PROFILE': 
+        return{
+            ...state,
+            companyProfileData:action.payload
+        }
+        case 'FETCH_DATA' :
+        return {
+            ...state,
+            dataArray:action.payload
+        }
         case 'FETCH_COMPANY_DATA' :
         return {
             ...state,
-            // companyDataArray:state.companyDataArray.concat( companyData.compData ),
-            companyDataArray:action.compData
+            companyDataArray:action.payload
         }
         case 'FETCH_VACANCY_DATA' :
         const vacancyDetail={

@@ -21,7 +21,7 @@ class CompanyRegister extends Component {
     handleSubmit = (e) => {
         e.preventDefault();
         this.props.compRegister(this.state)
-        this.props.history.replace('/company/student-details')
+        this.props.history.replace('/')
     }
 
     render() {

@@ -331,3 +331,100 @@
     //         console.log(errorMessage);
     //     })
     // }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    // render() {
+    //     return(
+    //         <div>
+    //             <button onClick={this.props.fetchStudData}>Student</button>
+    //             <button onClick={this.props.fetchCompData}>Company</button>
+    //             {this.props.catagory==='student' ?
+    //             <div className="row">
+    //                 <div className="col s1"></div>
+    //                 <div className="col s10">
+    //                 <table className="centered highlight">
+    //                     <thead>
+    //                         <tr>
+    //                             <th>First Name</th>
+    //                             <th>Last Name</th>
+    //                             <th>Address</th>
+    //                             <th>Age</th>
+    //                             <th>University</th>
+    //                             <th>Year Of Passing</th>
+    //                             <th>Aggregate</th>
+    //                             <th>Department</th>
+    //                         </tr>
+    //                     </thead>
+    //                     <tbody>
+    //                     {this.props.student ? this.props.student.map(items => {
+    //                     return(
+    //                         <tr>
+    //                             <td>{items.studentData.fName}</td>
+    //                             <td>{items.studentData.lName}</td>
+    //                             <td>{items.studentData.address}</td>
+    //                             <td>{items.studentData.age}</td>
+    //                             <td>{items.studentData.university}</td>
+    //                             <td>{items.studentData.yearOfPassingUni}</td>
+    //                             <td>{items.studentData.aggregateUni}</td>
+    //                             <td>{items.studentData.department}</td>
+    //                         </tr>
+    //                     )}) : 'loading'}
+    //                     </tbody>
+    //                 </table>
+    //                 </div>
+    //                 </div> 
+    //              : 
+    //              <div className="row">
+    //                 <div className="col s1"></div>
+    //                 <div className="col s10">
+    //                     <table className="centered highlight">
+    //                         <thead>
+    //                             <tr>
+    //                                 <th>Company Name</th>
+    //                                 <th>Contact No</th>
+    //                                 <th>Email</th>
+    //                                 <th>Established Date</th>
+    //                             </tr>
+    //                         </thead>
+    //                         <tbody>
+    //                             {this.props.company ? this.props.company.map(item => {
+    //                                 return (
+
+    //                                     <tr>
+    //                                         <td>{item.companyData.companyName}</td>
+    //                                         <td>{item.companyData.contact}</td>
+    //                                         <td>{item.companyData.email}</td>
+    //                                         <td>{item.companyData.establishedDate}</td>
+    //                                     </tr>
+    //                                 )
+    //                             }) : 'loading'}
+    //                         </tbody>
+    //                     </table>
+    //                 </div>
+    //             </div>
+    //              }
+    //         </div>
+    //     )
+    // }

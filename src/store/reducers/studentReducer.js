@@ -1,17 +1,20 @@
 const initState={
     studentDataArray:[],
-    fetchStudDataArray:[]
+    studentProfileData:{}
 }
 
 const studentReducer = (state=initState, action) => {
     switch(action.type) {
-        case 'FETCH_STUDENT_DATA':
-        const fetchSData = {
-            studentData:action.studData
-        }
+        case 'STUDENT_PROFILE' :
         return{
             ...state,
-            fetchStudDataArray:state.fetchStudDataArray.concat( fetchSData.studentData )
+            studentProfileData:action.payload
+        }
+        case 'FETCH_STUDENT_DATA':
+        
+        return{
+            ...state,
+            studentDataArray:action.studData
         }
         default:
         return state;

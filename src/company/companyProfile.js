@@ -1,31 +1,12 @@
-import React, { Component } from 'react';
-import { connect } from 'react-redux';
-import { fetchCompData } from '../store/actions/index'
-import fire from '../Firebase/config'
+import React, { Component } from 'react'
+import { connect } from 'react-redux'
+import { getCompProfile } from '../store/actions/index'
 
-class AllCompany extends Component {
-    state = {
-        isStatus: true
-    }
-    componentWillMount = () => {
-        this.checkStatus()
-    }
-    checkStatus = () => {
-        const user = fire.auth().currentUser;
-        const uid = user.uid
-        fire.database().ref("StudentRegister/" + uid).on('value', snapshot => {
-            let data = snapshot.val()
-            let currentStatus = data.isStatus;
-            this.setState({ isStatus: currentStatus })
-        })
-    }
+class CompanyProfile extends Component {
 
     render() {
-        // console.log("Value of props")
-        // console.log(this.props)
-        return (
-            <div>
-                {this.state.isStatus ? 
+        return(
+            <div> 
                     <div className="row">
                     <div className="col s1"></div>
                     <div className="col s10">
@@ -39,7 +20,7 @@ class AllCompany extends Component {
                                 </tr>
                             </thead>
                             <tbody>
-                                {this.props.company ? this.props.company.map(item => {
+                                {this.props.companyProfile ? this.props.companyProfile.map(item => {
                                     return (
 
                                         <tr>
@@ -54,22 +35,21 @@ class AllCompany extends Component {
                         </table>
                     </div>
                 </div>
-                : 
-                alert('You are Blocked by admin you can not see any data' )
-                }
                 
             </div>
         )
     }
 }
-const mapStateToProps = (state) => ({
-    company: state.company.companyDataArray
-})
-const mapDispatchToProps = (dispatch) => {
-    dispatch(fetchCompData())
-    return {
+
+const mapStateToProps = (state) => {
+    return{
+        companyProfile : state.company.companyProfileData
     }
 }
 
+const mapDispatchToProps = (dispatch) => {
+    dispatch(getCompProfile())
+}
 
-export default connect(mapStateToProps, mapDispatchToProps)(AllCompany);
+
+export default connect(mapStateToProps, mapDispatchToProps)(CompanyProfile)

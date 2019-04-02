@@ -2,6 +2,8 @@ import React, { Component } from 'react'
 import fire from '../Firebase/config';
 import Signin from '../auth/Signin';
 // import Dashboard from '../Dashboard/dashboard';
+// import { BrowserRouter, Switch, Route, Redirect } from 'react-router-dom'
+// import Dashboard from '../Dashboard/dashboard';
 
 
 class Enter extends Component {
@@ -33,7 +35,7 @@ class Enter extends Component {
     render() {
         return (
             <div>
-            {this.state.user ? this.props.history.replace('/dashboard') : (<Signin/>)}
+            {this.state.user ? this.props.history.replace('/dashboard') : (<Signin />)}
             </div>
 
       )

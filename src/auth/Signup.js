@@ -23,8 +23,8 @@ class SignUp extends Component {
     render() {
         return(
             <div>
-                <button onClick={() => {this.redirecting('student')}}>Student</button>
-                <button onClick={() => {this.redirecting('company')}}>Company</button>
+                <button className='waves-effect waves-light btn' onClick={() => {this.redirecting('student')}}>Student</button>
+                <button className='waves-effect waves-light btn' onClick={() => {this.redirecting('company')}}>Company</button>
             </div>
         )
     }

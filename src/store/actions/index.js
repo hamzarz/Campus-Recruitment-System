@@ -3,7 +3,7 @@ import fire from '../../Firebase/config'
 //Getting User's catagory
 export const gettingUserId = () => async dispatch => {
     let currentUserCatagory = ''
-    const user = fire.auth().currentUser;
+    const user = fire.auth().currentUser
     const userId = user.uid
     fire.database().ref('AllUsersData/'+ userId).on('value', snapshot => {
         const currentUser = snapshot.val().catagory
@@ -15,28 +15,39 @@ export const gettingUserId = () => async dispatch => {
 }
 
 //Company Register
-export const compRegister = companyData => async dispatch => {
+export const compRegister = companyData => async => {
     if(companyData.companyName&&companyData.contact&&companyData.email&&companyData.establishedDate&&companyData.userName&&companyData.password){
         fire.auth().createUserWithEmailAndPassword(companyData.email,companyData.password)
         .then(success => {
             console.log('signup success')
             const uid = success.user.uid;
-            fire.database().ref('AllUsersData/' + uid).set({uid,catagory:'company'}).then(() => {
-
-                fire.database().ref('CompanyRegister/' + uid).set({companyData, uid, catagory:'company'}).then(() => {
-                    console.log('Company Added')
-                    console.log("uid")
-                    console.log(uid)
-                    dispatch({type:'COMPANY_REGISTER', companyData})
-                })
+            fire.database().ref('AllUsersData/' + uid).set({ uid, catagory:'company' }).then(() => {
+                fire.database().ref('CompanyRegister/' + uid).set({companyData, uid, catagory:'company', isStatus:true})
+            }).catch((error) => {
+                alert(error.message)
             })
             }  
-        )
+        ).catch(error => {
+            console.log(error.message)
+            alert(error.message)
+        })
     }
     else {
         alert('All Fields are Required')
     }
 }
+
+//Getting All Users Data
+export const fetchData = () => async dispatch => {
+    let allData = []
+    fire.database().ref('AllUsersData/').on('value', snapshot => {
+        snapshot.forEach(users => {
+            let data = users.val();
+            allData.push( data )
+        })
+        dispatch({type:'FETCH_DATA', payload:allData})
+    })
+} 
 
 //Getting Company Data
 export const fetchCompData = () => async dispatch => {
@@ -46,7 +57,7 @@ export const fetchCompData = () => async dispatch => {
             let Cdata = compDetail.val();
             compData.push(Cdata)
         })
-        dispatch({type:'FETCH_COMPANY_DATA', compData})
+        dispatch({type:'FETCH_COMPANY_DATA', payload:compData})
     });
 };
 
@@ -81,17 +92,20 @@ export const postVacancies = vacancy => async dispatch => {
 
 //Student Register
 export const studRegister = studentData => async dispatch => {
-    if(studentData.fName&&studentData.lName&&studentData.email&&studentData.gender&&studentData.contact&&studentData.city&&studentData.address&&studentData.dateOfBirth&&studentData.age&&studentData.university&&studentData.yearOfPassingUni&&studentData.aggregateUni&&studentData.department&&studentData.otherQualification&&studentData.extracurricular&&studentData.userName&&studentData.password){
+    if(studentData.fName&&studentData.lName&&studentData.email&&studentData.gender&&studentData.contact&&studentData.address&&studentData.age&&studentData.university&&studentData.yearOfPassingUni&&studentData.aggregateUni&&studentData.department&&studentData.userName&&studentData.password){
         fire.auth().createUserWithEmailAndPassword(studentData.email,studentData.password)
         .then(success => {
             const uid = success.user.uid;
-            fire.database().ref('AllUsersData/'+ uid).set({uid,catagory:'student'}).then(() => {
-                console.log('uid and catagory is set in database')
-            })
-            fire.database().ref('StudentRegister/'+ uid).set({studentData,uid,catagory:'student'}).then(() => {
+            fire.database().ref('AllUsersData/'+ uid).set({ uid, catagory:'student' }).then(() => {
+                fire.database().ref('StudentRegister/' + uid).set({studentData,uid,catagory:'student', isStatus:true})
                 console.log('Student Register');
-                dispatch({type:'STUDENT_REGISTER', studentData})
+            }).catch((error) => {
+                alert(error.message)
+                console.log(error.message)
             })
+        }).catch(error => {
+            console.log(error.message)
+            alert(error.message)
         })
     }
 }
@@ -109,7 +123,42 @@ export const fetchStudData = () =>async dispatch => {
 }
 
 
+//Fetching Company Profile
+export const getCompProfile = () => async dispatch => {
+    let companyProfile = []
+    const user = fire.auth().currentUser
+    const uid = user.uid
+    fire.database().ref('CompanyRegister/' + uid).on('value', snapshot => {
+        let data = snapshot.val();
+        companyProfile.push( data )
+        dispatch({type:'COMPANY_PROFILE', payload:companyProfile})
+    })
+}
+//Fetching Student Profile
+export const getStudProfile = () => async dispatch => {
+    let studentProfile = {}
+    const user = fire.auth().currentUser
+    const uid = user.uid
+    fire.database().ref('StudentRegister/' + uid).on('value', snapshot => {
+        let data = snapshot.val().studentData;
+        studentProfile = data
+        dispatch({type:'STUDENT_PROFILE', payload:studentProfile})
+    })
+}
 
+//Update Request
+export const updateRequest = (studentData) => async dispatch => {
+    const user = fire.auth().currentUser
+    const uid = user.uid
+    fire.database().ref('StudentRegister/' + uid).set({uid,studentData,isStatus:true, catagory:'student'}).then(() => 
+    console.log('User is updated'),
+    alert('your data is updated')
+    ).catch(error => {
+        console.log(error.message)
+        alert(error.message)
+    })
+    
+}
 
 export const signIn = signinData => async dispatch => {
     fire.auth().signInWithEmailAndPassword(signinData.email, signinData.password).then(() => {

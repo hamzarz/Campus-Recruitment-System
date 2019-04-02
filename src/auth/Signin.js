@@ -4,8 +4,8 @@ import { signIn } from '../store/actions/index'
 
 class SignIn extends Component {
   state={
-    email:'',
-    password:''
+    email:'admin@gmail.com',
+    password:'admin123'
   }
   handleChange = (e) => {
       this.setState({

@@ -2,9 +2,9 @@ import React, { Component } from 'react'
 // import fire from '../Firebase/config';
 import { connect } from 'react-redux'
 import { gettingUserId } from '../store/actions/index'
-import AllCompany from '../student/allCompany'
-import StudentDetails from '../company/studentDetails';
-// import AdminPage from '../Admin/admin'
+import StudentDashboard from '../student/studentDashboard'
+import AdminPage from '../Admin/admin'
+import CompanyDashboard from '../company/companyDashboard';
 
 class Dashboard extends Component {
    
@@ -13,11 +13,11 @@ class Dashboard extends Component {
         const userCatagory = this.props.currentUserCatagory;
         switch(userCatagory) {
             case'company':
-            return <StudentDetails/>
+            return <CompanyDashboard/>
             case'student':
-            return <AllCompany />
+            return <StudentDashboard/>
             case 'admin':
-            return this.props.history.replace('/admin')
+            return <AdminPage/>
             default:
             return 'nothing to show'
         }
@@ -25,12 +25,9 @@ class Dashboard extends Component {
 
 
     render() {
-        // const userCatagory = this.props.currentUserCatagory
         return(
             <div>
-                {/* {this.state.userCatagory==='company'?"show student data": 'show company data'} */}
-                <ul>
-                    {/* {this.props.currentUserCatagory?<li>{this.props.currentUserCatagory}</li>:'loading data for you'} */}
+                <ul>  
                     {this.gettingData()}
                 </ul>
             </div>
