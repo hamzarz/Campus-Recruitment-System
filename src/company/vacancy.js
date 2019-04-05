@@ -7,7 +7,8 @@ class Vacancy extends Component {
       jobProfile:"",
       email:"",
       salary:"",
-      jobDiscription:""
+      jobDiscription:"",
+      isApplied:false,
     }
 
     handleChange = (e) => {

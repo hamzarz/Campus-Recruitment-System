@@ -2,78 +2,92 @@ import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import fire from '../Firebase/config'
 import { fetchCompData, fetchStudData, gettingUserId } from '../store/actions/index'
+import MDSpinner from 'react-md-spinner';
 
 class AdminPage extends Component {
 
     state = {
-        catagory:''
+        catagory: '',
+        loader: true
     }
 
-    // componentWillMount = () => {
-    //     this.gettingUserId()
+    // componentDidMount = () => {
+    //     this.setState({loader:false})
     // }
+    componentDidUpdate = (prevProps,prevState) => {
+        // this.setState({loader:false})
+        if(prevProps.data !== this.props.data) {
+            this.setState({loader:false})
+        }
+    }
 
     blockUser = (uid, isStatus) => {
         let personCatagory = ''
         fire.database().ref('AllUsersData/' + uid).on("value", snapshot => {
             let catagory = snapshot.val().catagory;
             personCatagory = catagory
-            {personCatagory === 'company' ?
-            fire.database().ref('CompanyRegister/' + uid).update({
-                isStatus:!isStatus
-            }) : 
-            fire.database().ref('StudentRegister/' + uid).update({
-                isStatus:!isStatus
-            })
+            {
+                personCatagory === 'company' ?
+                    fire.database().ref('CompanyRegister/' + uid).update({
+                        isStatus: !isStatus
+                    }).then(() => {
+                        this.getCompanyData()
+                    }) :
+                    fire.database().ref('StudentRegister/' + uid).update({
+                        isStatus: !isStatus
+                    }).then(() => {
+                        this.getStudentData()
+                    })
             }
         })
-        
+
     }
 
     fetchRequestedData = () => {
         const catagory = this.state.catagory;
-        if(catagory === 'student') {
-            return(
+        if (catagory === 'student') {
+            return (
                 <div className="row">
                     <div className="col s1"></div>
                     <div className="col s10">
-                    <table className="centered highlight">
-                        <thead>
-                            <tr>
-                                <th>First Name</th>
-                                <th>Last Name</th>
-                                <th>Address</th>
-                                <th>Age</th>
-                                <th>University</th>
-                                <th>Year Of Passing</th>
-                                <th>Aggregate</th>
-                                <th>Department</th>
-                                <th>Block</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                        {this.props.student ? this.props.student.map(items => {
-                        return(
-                            <tr>
-                                <td>{items.studentData.fName}</td>
-                                <td>{items.studentData.lName}</td>
-                                <td>{items.studentData.address}</td>
-                                <td>{items.studentData.age}</td>
-                                <td>{items.studentData.university}</td>
-                                <td>{items.studentData.yearOfPassingUni}</td>
-                                <td>{items.studentData.aggregateUni}</td>
-                                <td>{items.studentData.department}</td>
-                                <td onClick={() => this.blockUser(items.uid, items.isStatus)}>{items.isStatus ? 'DO IT' : 'UNDO'}</td>
-                            </tr>
-                        )}) : 'loading'}
-                        </tbody>
-                    </table>
+                        <table className="centered highlight">
+                            <thead>
+                                <tr>
+                                    <th>First Name</th>
+                                    <th>Last Name</th>
+                                    <th>Address</th>
+                                    <th>Age</th>
+                                    <th>University</th>
+                                    <th>Year Of Passing</th>
+                                    <th>Aggregate</th>
+                                    <th>Department</th>
+                                    <th>Block</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {this.props.student ? this.props.student.map(items => {
+                                    return (
+                                        <tr>
+                                            <td>{items.studentData.fName}</td>
+                                            <td>{items.studentData.lName}</td>
+                                            <td>{items.studentData.address}</td>
+                                            <td>{items.studentData.age}</td>
+                                            <td>{items.studentData.university}</td>
+                                            <td>{items.studentData.yearOfPassingUni}</td>
+                                            <td>{items.studentData.aggregateUni}</td>
+                                            <td>{items.studentData.department}</td>
+                                            <td onClick={() => this.blockUser(items.uid, items.isStatus)}><button className="waves-effect waves-light btn">{items.isStatus ? 'BLOCK' : 'UNBLOCK'}</button></td>
+                                        </tr>
+                                    )
+                                }) : 'loading'}
+                            </tbody>
+                        </table>
                     </div>
-                    </div> 
+                </div>
             )
         }
         else if (catagory === 'company') {
-            return(
+            return (
                 <div className="row">
                     <div className="col s1"></div>
                     <div className="col s10">
@@ -96,7 +110,7 @@ class AdminPage extends Component {
                                             <td>{item.companyData.contact}</td>
                                             <td>{item.companyData.email}</td>
                                             <td>{item.companyData.establishedDate}</td>
-                                            <td onClick={() => this.blockUser(item.uid, item.isStatus)}>{item.isStatus?'DO IT':'UNDO'}</td>
+                                            <td onClick={() => this.blockUser(item.uid, item.isStatus)}><button className="waves-effect waves-light btn">{item.isStatus ? 'BLOCK' : 'UNBLOCK'}</button></td>
                                         </tr>
                                     )
                                 }) : 'loading'}
@@ -109,39 +123,47 @@ class AdminPage extends Component {
     }
 
     getStudentData = () => {
-        this.setState({catagory:'student'})
+        this.setState({ catagory: 'student' })
         this.props.fetchStudData();
     }
     getCompanyData = () => {
-        this.setState({catagory:'company'})
+        this.setState({ catagory: 'company' })
         this.props.fetchCompData();
     }
 
     render() {
-        return(
+        return (
             <div>
-                <button className='waves-effect waves-light btn' onClick={this.getStudentData}>Student</button>
-                <button className='waves-effect waves-light btn' onClick={this.getCompanyData}>Company</button>
-                {this.fetchRequestedData()}
+                {
+                    this.state.loader ? (<div className="center-align"><MDSpinner size={150}/></div>) : (
+                        <div className="center-align">
+                            <button className='waves-effect waves-light btn' onClick={this.getStudentData}>Student</button>
+                            <button className='waves-effect waves-light btn' onClick={this.getCompanyData}>Company</button>
+                            {this.fetchRequestedData()}
+                        </div>
+                    )
+                }
             </div>
+
+
         )
     }
 }
 
 const mapStateToProps = (state) => {
-    return{
+    return {
         // Data:state.admin.allUsersData
-        student:state.student.studentDataArray,
-        company:state.company.companyDataArray,
-        catagory:state.company.currentUserCatagory
+        student: state.student.studentDataArray,
+        company: state.company.companyDataArray,
+        catagory: state.company.currentUserCatagory
     }
 }
 
 const mapDispatchToProps = (dispatch) => {
     dispatch(gettingUserId())
     return {
-        fetchCompData : () => dispatch(fetchCompData()),
-        fetchStudData : () => dispatch(fetchStudData())
+        fetchCompData: () => dispatch(fetchCompData()),
+        fetchStudData: () => dispatch(fetchStudData())
         // gettingUserId : () => dispatch(gettingUserId())
     }
 }

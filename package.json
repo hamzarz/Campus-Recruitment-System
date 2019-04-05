@@ -8,6 +8,7 @@
     "materialize-css": "^1.0.0-rc.2",
     "react": "^16.8.3",
     "react-dom": "^16.8.3",
+    "react-md-spinner": "^0.3.0",
     "react-redux": "^6.0.1",
     "react-redux-firebase": "^2.2.6",
     "react-router-dom": "^4.3.1",

@@ -5,9 +5,16 @@ import { gettingUserId } from '../store/actions/index'
 import StudentDashboard from '../student/studentDashboard'
 import AdminPage from '../Admin/admin'
 import CompanyDashboard from '../company/companyDashboard';
+import { CircularProgress } from '@material-ui/core'
 
 class Dashboard extends Component {
-   
+   state={
+       loader:true
+   }
+
+   componentDidMount = () => {
+       this.setState({loader:false})
+   }
 
     gettingData = () => {
         const userCatagory = this.props.currentUserCatagory;
@@ -27,8 +34,8 @@ class Dashboard extends Component {
     render() {
         return(
             <div>
-                <ul>  
-                    {this.gettingData()}
+                <ul> 
+                    {this.state.loader ? <CircularProgress/> : this.gettingData()}
                 </ul>
             </div>
         )

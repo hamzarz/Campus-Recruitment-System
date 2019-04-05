@@ -63,7 +63,7 @@ class CompanyRegister extends Component {
                                 <div className="input-field col s6">
                                     <i className="material-icons prefix">person</i>
                                     <input onChange={this.handleChange} value={this.state.userName} autoComplete='' id="userName" type="text" className="validate" />
-                                    <label htmlFor="userName">User Name</label>
+                                    <label htmlFor="userName">Owner Name</label>
                                 </div>
                                 <div className="input-field col s6">
                                     <i className="material-icons prefix">lock</i>

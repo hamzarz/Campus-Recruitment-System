@@ -1,14 +1,22 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { fetchVacancyData } from '../store/actions/index'
+import fire from '../Firebase/config'
 
 class AllJobs extends Component {
     state = {
         jobProfile:"",
         email:"",
         salary:"",
-        jobDiscription:""
+        jobDiscription:"",
+        isApplied:false
       } 
+
+      apply = () => {
+          const uid = fire.auth().currentUser.uid;
+          fire.database().ref('Applied/' + uid).set({uid,isApplied:true})
+          this.setState({isApplied:true})
+      }
     
     render() {
         console.log("Value of props")
@@ -28,16 +36,18 @@ class AllJobs extends Component {
                                 <th>Contact No</th>
                                 <th>Email</th>
                                 <th>Established Date</th>
+                                <th>Apply</th>
                             </tr>
                         </thead>
                         <tbody>
                     {this.props.allVacancies ? this.props.allVacancies.map(item =>{
                         return (
                             <tr>
-                                <td>{item.jobProfile}</td>
-                                <td>{item.email}</td>
-                                <td>{item.salary}</td>
-                                <td>{item.jobDiscription}</td>
+                                <td>{item?item.jobProfile:'loading'}</td>
+                                <td>{item?item.email:'loading'}</td>
+                                <td>{item?item.salary:'loading'}</td>
+                                <td>{item?item.jobDiscription:'loading'}</td>
+                                <td><button onClick={this.apply}>{this.state.isApplied?'Applied':'Apply'}</button></td>
                             </tr>
                     )}) : 'loading'}
                         </tbody>
@@ -54,8 +64,6 @@ const mapStateToProps = (state) => ({
 })
 const mapDispatchToProps = (dispatch) => {
     dispatch(fetchVacancyData())
-    return {
-    }
 }
 
 

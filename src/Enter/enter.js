@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import fire from '../Firebase/config';
 import Signin from '../auth/Signin';
+import { CircularProgress } from '@material-ui/core';
 // import Dashboard from '../Dashboard/dashboard';
 // import { BrowserRouter, Switch, Route, Redirect } from 'react-router-dom'
 // import Dashboard from '../Dashboard/dashboard';
@@ -9,11 +10,14 @@ import Signin from '../auth/Signin';
 class Enter extends Component {
     constructor(props) {
         super(props);
-        this.state = {}
+        this.state = {
+            loader:true,
+        }
         // this.authListener();
     }
-    // componentDidMount = () => {
-    // }
+    componentDidMount = () => {
+        this.setState({loader:false})
+    }
     componentWillMount = () => {
         this.authListener()
     }
@@ -35,7 +39,7 @@ class Enter extends Component {
     render() {
         return (
             <div>
-            {this.state.user ? this.props.history.replace('/dashboard') : (<Signin />)}
+                {this.state.loader ? (<CircularProgress/>) : (this.state.user ? this.props.history.replace('/dashboard') : (<Signin />)) }
             </div>
 
       )

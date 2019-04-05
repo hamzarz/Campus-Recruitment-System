@@ -5,7 +5,8 @@ import { signIn } from '../store/actions/index'
 class SignIn extends Component {
   state={
     email:'admin@gmail.com',
-    password:'admin123'
+    password:'admin123',
+    loader:false,
   }
   handleChange = (e) => {
       this.setState({
@@ -17,8 +18,10 @@ class SignIn extends Component {
   // }
   handleSubmit = (e) => {
       e.preventDefault();
+      this.setState({loader:true})
       console.log(this.state)
       this.props.signIn(this.state);
+      // this.setState({loader:false})
   }
   
     render() {
@@ -28,11 +31,11 @@ class SignIn extends Component {
             <h5 className="grey-text text-darken-3">Log In</h5>
             <div className="input-field">
                 <label htmlFor="email">Email</label>
-                <input type="email" id="email" onChange={this.handleChange} />
+                <input type="email" id="email" value={this.state.email} onChange={this.handleChange} />
             </div>
             <div className="input-field">
                 <label htmlFor="password">Password</label>
-                <input type="password" id="password" onChange={this.handleChange} />
+                <input type="password" id="password" value={this.state.password} onChange={this.handleChange} />
             </div>
             <p>Don't have account click here <a href="./signup">Signup</a></p>
             <div className="input-field">
