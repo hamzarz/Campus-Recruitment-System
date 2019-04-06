@@ -11,15 +11,14 @@ class AdminPage extends Component {
         loader: true
     }
 
-    // componentDidMount = () => {
-    //     this.setState({loader:false})
-    // }
-    componentDidUpdate = (prevProps,prevState) => {
-        // this.setState({loader:false})
-        if(prevProps.data !== this.props.data) {
-            this.setState({loader:false})
-        }
+    componentDidMount = () => {
+        this.setState({ loader: false })
     }
+    // componentDidUpdate = (prevProps,prevState) => {
+    //     if(prevProps !== this.props) {
+    //         this.setState({loader:false})
+    //     }
+    // }
 
     blockUser = (uid, isStatus) => {
         let personCatagory = ''
@@ -135,7 +134,7 @@ class AdminPage extends Component {
         return (
             <div>
                 {
-                    this.state.loader ? (<div className="center-align"><MDSpinner size={150}/></div>) : (
+                    this.state.loader ? (<div className="center-align"><MDSpinner size={150} /></div>) : (
                         <div className="center-align">
                             <button className='waves-effect waves-light btn' onClick={this.getStudentData}>Student</button>
                             <button className='waves-effect waves-light btn' onClick={this.getCompanyData}>Company</button>

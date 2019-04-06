@@ -3,7 +3,7 @@ import AllCompany from '../student/allCompany'
 import StudentProfile from './studentProfile'
 import fire from '../Firebase/config'
 import AllJobs from './viewJobs'
-import { CircularProgress } from '@material-ui/core';
+import MDSpinner from 'react-md-spinner'
 
 class CompanyDashboard extends Component {
     state = {
@@ -13,10 +13,11 @@ class CompanyDashboard extends Component {
     }
     componentWillMount = () => {
         this.checkStatus()
+        this.componentDidUpdate()
     }
 
     componentDidUpdate = (prevProps, prevState) => {
-        if(prevProps.data !== this.props.data) {
+        if(prevProps !== this.props) {
             this.setState({ loader: false })
         }
     }
@@ -77,7 +78,7 @@ class CompanyDashboard extends Component {
 
         return (
             <div>
-                {this.state.loader ? (<CircularProgress />) : (
+                {this.state.loader ? (<div className="center-align"><MDSpinner size={150} /></div>) : (
                     this.state.isStatus ? (
                         <div className="center-align">
                             <button className='waves-effect waves-light btn' onClick={() => { this.redirect('ownProfile') }}>Own Profile</button>

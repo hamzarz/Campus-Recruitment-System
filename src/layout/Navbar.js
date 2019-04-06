@@ -4,15 +4,16 @@ import SignedInLinks from './SigninLinks'
 import SignedOutLinks from './SignedOutLinks'
 // import { connect } from 'react-redux'
 import fire from 'firebase'
-import { CircularProgress } from '@material-ui/core';
-import MDSpinner from 'react-md-spinner';
+import MDSpinner from 'react-md-spinner'
 
 class Navbar extends Component {
     state = {
-        loader:true,
+        loader: true,
     }
-    componentDidMount = () => {
-        this.setState({loader:false})
+    componentDidUpdate = (prevProps, prevState) => {
+        if (prevProps !== this.props) {
+            this.setState({ loader: false })
+        }
     }
 
     componentWillMount = () => {
@@ -35,7 +36,7 @@ class Navbar extends Component {
     render() {
         return (
             <div>
-                {this.state.loder ? (<div className="center-align"><MDSpinner size={150}/></div>) : (
+                {this.state.loder ? (<div className="center-align"><MDSpinner size={150} /></div>) : (
                     <nav className="nav-wrapper grey darken-3">
                         <div className="container">
                             <Link to="/" className="left brand-logo">Campus Recruitment System</Link>

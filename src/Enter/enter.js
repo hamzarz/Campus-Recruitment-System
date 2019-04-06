@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import fire from '../Firebase/config';
 import Signin from '../auth/Signin';
-import { CircularProgress } from '@material-ui/core';
+import MDSpinner from 'react-md-spinner'
 // import Dashboard from '../Dashboard/dashboard';
 // import { BrowserRouter, Switch, Route, Redirect } from 'react-router-dom'
 // import Dashboard from '../Dashboard/dashboard';
@@ -11,21 +11,23 @@ class Enter extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            loader:true,
+            loader: false,
         }
         // this.authListener();
     }
-    componentDidMount = () => {
-        this.setState({loader:false})
-    }
+    // componentDidUpdate = (prevProps, prevState) => {
+    //     if (prevProps !== this.props) {
+    //         this.setState({ loader: false })
+    //     }
+    // }
     componentWillMount = () => {
         this.authListener()
     }
     authListener = () => {
         fire.auth().onAuthStateChanged(user => {
             debugger
-            if(user) {
-                this.setState({user});
+            if (user) {
+                this.setState({ user });
                 console.log('user id')
                 console.log(user.uid)
             }
@@ -34,15 +36,19 @@ class Enter extends Component {
             }
         })
     }
-    
+
 
     render() {
         return (
             <div>
-                {this.state.loader ? (<CircularProgress/>) : (this.state.user ? this.props.history.replace('/dashboard') : (<Signin />)) }
+                {this.state.loader ? (
+                    <div className="center-align"><MDSpinner size={150} /></div>
+                ) : (
+                        this.state.user ? this.props.history.replace('/dashboard') : (<Signin />)
+                    )}
             </div>
 
-      )
+        )
     }
 }
 export default Enter

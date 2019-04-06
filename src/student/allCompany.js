@@ -6,7 +6,13 @@ import MDSpinner from 'react-md-spinner';
 
 class AllCompany extends Component {
     state = {
-        isStatus: true
+        isStatus: true,
+        loader:true
+    }
+    componentDidUpdate = (prevProps, prevState) => {
+        if(prevProps !== this.props) {
+            this.setState({loader:false})
+        }
     }
     componentWillMount = () => {
         this.checkStatus()
@@ -22,12 +28,11 @@ class AllCompany extends Component {
     }
 
     render() {
-        let { isloading } = this.props.companyDataArray
         // console.log("Value of props")
         // console.log(this.props)
         return (
             <div>
-                {isloading ? <MDSpinner /> : (
+                {this.state.loader ? (<div className="center-align"><MDSpinner size={150} /></div>) : (
                     <div>
                         {this.state.isStatus ?
                             <div className="row">

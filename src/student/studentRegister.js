@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { studRegister } from '../store/actions/index';
-
+import MDSpinner from 'react-md-spinner'
 
 
 class StudentRegister extends Component {
@@ -22,7 +22,8 @@ class StudentRegister extends Component {
         // otherQualification:"",
         // extracurricular:"",
         userName:"",
-        password:""
+        password:"",
+        loader:true,
     }
 
 
@@ -30,6 +31,11 @@ class StudentRegister extends Component {
         this.setState({
             [e.target.id]: e.target.value
         })
+    }
+    componentDidUpdate = (prevProps,prevState) => {
+        if(prevProps !== this.props) {
+            this.setState({loader:false})
+        }
     }
 
     submitRegisterForm = (e) => {
@@ -42,6 +48,10 @@ class StudentRegister extends Component {
     render() {
         return(
             <div>
+                {this.state.loader ? (
+                    <div className="center-align"><MDSpinner size={150} /></div>
+                ) : (
+                    <div>
                 <div className='row'>
                 <div className="col s1"></div>
           <form className="col s10" onSubmit={this.submitRegisterForm}>
@@ -164,6 +174,11 @@ class StudentRegister extends Component {
           </form>
         </div>
             </div>
+                )}
+            </div>
+
+
+            
         );
     }
 }

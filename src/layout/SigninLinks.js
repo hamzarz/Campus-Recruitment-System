@@ -20,7 +20,7 @@ class SignedInLinks extends Component {
     }
 
     gettingIsStatus = () => {
-        const catagory = this.state.catagory
+        // const catagory = this.state.catagory
         const uid = fire.auth().currentUser.uid
         fire.database().ref('AllUsersData/' + uid).on('value', snapshot => {
             const data = snapshot.val()
@@ -52,14 +52,14 @@ class SignedInLinks extends Component {
         if (catagory === 'company') {
             return (
                 <div>
-                    {this.state.isStatus ? (<li><NavLink to="/post-vacancy">Post Vacancy</NavLink></li>) : (console.log('nothing will show'))}
+                    {this.state.isStatus ? (<ul><li><NavLink to="/post-vacancy">Post Vacancy</NavLink></li></ul>) : (console.log('nothing will show'))}
                 </div>
             )
         }
         else if (catagory === 'student') {
             return (
                 <div>
-                    {this.state.isStatus ? (<li><NavLink to="/view-jobs">View Jobs</NavLink></li>) : (console.log('nothing will show'))}
+                    {this.state.isStatus ? (<ul><li><NavLink to="/view-jobs">View Jobs</NavLink></li></ul>) : (console.log('nothing will show'))}
                 </div>
             )
         }

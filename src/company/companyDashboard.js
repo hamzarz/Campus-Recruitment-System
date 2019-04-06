@@ -13,17 +13,14 @@ class CompanyDashboard extends Component {
         loader: true
     }
 
-    componentDidMount = () => {
-            this.setState({ loader: false })
+    // componentDidMount = () => {
+    //         this.setState({ loader: false })
+    // }
+    componentDidUpdate = (prevPros, prevState) =>{
+        if(prevPros !== this.props) {
+            this.setState({ loader : false})
+        }
     }
-    // componentDidUpdate = (prevPros, prevState) =>{
-    //     if(prevPros.data !== this.props.data) {
-    //         this.setState({ loader : false})
-    //     }
-    // }
-    // componentWillUpdate = () => {
-    //     this.setState({loader:true})
-    // }
 
     componentWillMount = () => {
         this.setState({loader:true})

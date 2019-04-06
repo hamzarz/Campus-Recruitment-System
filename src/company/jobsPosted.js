@@ -8,11 +8,11 @@ class JobPosted extends Component {
         loader: true,
     }
 
-    componentDidMount = () => {
-        this.setState({ loader: false })
-    }
+    // componentDidMount = () => {
+    //     this.setState({ loader: false })
+    // }
     componentDidUpdate = (prevProps, prevState) => {
-        if (prevProps.data !== this.props.data) {
+        if (prevProps !== this.props) {
             this.setState({ loader: false })
         }
     }
